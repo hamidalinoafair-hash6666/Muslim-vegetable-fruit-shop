@@ -1,103 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Update Prices</title>
+    <title>ایڈمن ڈیش بورڈ - سبزیوں کی قیمتیں</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Correct Supabase CDN Script -->
+    <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
-        <h1>Muslim Vegetable Shop Admin</h1>
-        <p>Update Daily Vegetable Prices</p>
+        <h1>مسلم ویجیٹیبل شاپ ایڈمن</h1>
+        <p>روزانہ کی قیمتیں اپ ڈیٹ کریں</p>
     </header>
 
     <main id="admin-main">
-        <!-- Secure Password Login Panel Layout -->
+        <!-- لاگ ان پینل -->
         <div id="login-panel" class="auth-card">
-            <h3>Secure Admin Login</h3>
-            <input type="password" id="admin-pass" placeholder="Enter Secure Password">
-            <button onclick="checkPassword()">Login</button>
-            <p id="login-error" class="error-text"></p>
+            <h3>ایڈمن لاگ ان</h3>
+            <form onsubmit="handleLogin(event)">
+                <input type="password" id="admin-pass" placeholder="پاس ورڈ درج کریں" required>
+                <button type="submit">لاگ ان</button>
+            </form>
+            <p id="login-error" class="error-text" style="color: red;"></p>
         </div>
 
-        <!-- Dashboard Layout, initially hidden -->
+        <!-- ڈیش بورڈ پینل -->
         <div id="dashboard-panel" style="display: none;">
-            <h2>Daily Price Manager</h2>
+            <h2>قیمتوں کا مینیجر</h2>
             <div id="admin-list">
-                <p>Loading records...</p>
+                <p>ڈیٹا لوڈ ہو رہا ہے...</p>
             </div>
         </div>
     </main>
 
     <script>
-        // Yahan sahi URL aur Key set کر دی گئی ہے
         const SUPABASE_URL = "https://gtqvpjwpsxdampdsdvry.supabase.co";
         const SUPABASE_KEY = "sb_publishable_GfFX8mud_W3b39-f0p6jDg_M-EPAcu-";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Simple secure dashboard access check 
-        function checkPassword() {
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // الرٹ 1: چیک کریں کہ لاگ ان بٹن پر کلک ہو رہا ہے یا نہیں
+            alert("لاگ ان کا عمل شروع ہو گیا ہے!");
+
             const pass = document.getElementById('admin-pass').value;
+            
+            // الرٹ 2: جو پاس ورڈ آپ نے لکھا ہے وہ الرٹ میں دکھائی دے گا
+            alert("آپ نے یہ پاس ورڈ درج کیا ہے: " + pass);
+
             if (pass === "123.babli") { 
+                alert("پاس ورڈ درست ہے! ڈیش بورڈ لوڈ ہو رہا ہے۔");
                 document.getElementById('login-panel').style.display = 'none';
                 document.getElementById('dashboard-panel').style.display = 'block';
                 loadAdminPanel();
             } else {
-                document.getElementById('login-error').innerText = "Incorrect Password! Try again.";
+                alert("پاس ورڈ غلط ہے!");
+                document.getElementById('login-error').innerText = "غلط پاس ورڈ! دوبارہ کوشش کریں۔";
             }
         }
 
         async function loadAdminPanel() {
-            const { data, error } = await supabase.from('vegetables').select('*');
+            alert("ڈیٹا بیس سے سبزیوں کا ڈیٹا حاصل کیا جا رہا ہے...");
+            
+            const listContainer = document.getElementById('admin-list');
+            listContainer.innerHTML = "<p>ڈیٹا لوڈ ہو رہا ہے...</p>";
+
+            const { data, error } = await supabase.from('vegetables').select('*').order('id', { ascending: true });
+            
             if (error) {
-                alert("Error connecting to database: " + error.message);
+                alert("ڈیٹا بیس کنیکشن میں مسئلہ: " + error.message);
+                listContainer.innerHTML = "<p>ڈیٹا لوڈ کرنے میں ناکامی۔</p>";
                 return;
             }
 
-            // Seed initial database items if empty on first load
             if (data.length === 0) {
+                alert("ڈیٹا بیس خالی ہے، ابتدائی ڈیٹا ڈالا جا رہا ہے۔");
                 const sampleVeg = [
-                    { name: 'Potatoes (Aluu)', price_per_kg: 80, image_url: 'https://unsplash.com' },
-                    { name: 'Onions (Pyaaz)', price_per_kg: 120, image_url: 'https://unsplash.com' },
-                    { name: 'Tomatoes (Tamatar)', price_per_kg: 150, image_url: 'https://unsplash.com' },
-                    { name: 'Green Chillies (Hari Mirch)', price_per_kg: 200, image_url: 'https://unsplash.com' }
+                    { name: 'Potatoes (آلو)', price_per_kg: 80, image_url: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655' },
+                    { name: 'Onions (پیاز)', price_per_kg: 120, image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8ce' },
+                    { name: 'Tomatoes (ٹماٹر)', price_per_kg: 150, image_url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea' },
+                    { name: 'Green Chillies (ہری مرچ)', price_per_kg: 200, image_url: 'https://images.unsplash.com/photo-1588879460405-59b81b857700' }
                 ];
-                await supabase.from('vegetables').insert(sampleVeg);
+                
+                const { error: seedError } = await supabase.from('vegetables').insert(sampleVeg);
+                if (seedError) {
+                    alert("نمونہ ڈیٹا ڈالنے میں ناکامی: " + seedError.message);
+                    return;
+                }
                 loadAdminPanel();
                 return;
             }
 
-            const listContainer = document.getElementById('admin-list');
+            alert("ڈیٹا کامیابی سے لوڈ ہو گیا ہے!");
+
             listContainer.innerHTML = '';
 
             data.forEach(veg => {
                 const row = document.createElement('div');
                 row.className = 'admin-row';
-                row.innerHTML = `
-                    <span><strong>${veg.name}</strong></span>
-                    <div>
-                        Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" style="width: 70px;"> / kg
-                        <button onclick="updatePrice(${veg.id})">Save</button>
-                    </div>
+                
+                const titleSpan = document.createElement('span');
+                const strongTitle = document.createElement('strong');
+                strongTitle.textContent = veg.name;
+                titleSpan.appendChild(strongTitle);
+
+                const priceDiv = document.createElement('div');
+                priceDiv.innerHTML = `
+                    Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" step="0.01" style="width: 80px;"> / kg
+                    <button onclick="updatePrice(${veg.id})">سیو کریں</button>
                 `;
+
+                row.appendChild(titleSpan);
+                row.appendChild(priceDiv);
                 listContainer.appendChild(row);
             });
         }
 
         async function updatePrice(id) {
-            const newPrice = document.getElementById(`input-${id}`).value;
+            const inputVal = document.getElementById(`input-${id}`).value;
+            const newPrice = parseFloat(inputVal);
+
+            if (isNaN(newPrice) || newPrice < 0) {
+                alert("براہ کرم صحیح قیمت درج کریں۔");
+                return;
+            }
+
             const { error } = await supabase
                 .from('vegetables')
-                .update({ price_per_kg: parseFloat(newPrice) })
+                .update({ price_per_kg: newPrice })
                 .eq('id', id);
 
             if (error) {
-                alert("Failed to update price.");
+                alert("قیمت اپ ڈیٹ نہ ہو سکی: " + error.message);
             } else {
-                alert("Price updated successfully!");
+                alert("قیمت کامیابی سے اپ ڈیٹ ہو گئی!");
             }
         }
     </script>
