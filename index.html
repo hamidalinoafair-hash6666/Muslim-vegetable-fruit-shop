@@ -1,4 +1,4 @@
-p<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ur">
 <head>
     <meta charset="UTF-8">
@@ -95,7 +95,7 @@ p<!DOCTYPE html>
                 titleSpan.textContent = veg.name;
 
                 const priceDiv = document.createElement('div');
-                priceDiv.className = 'price-controls';
+                priceDiv.className, priceDiv.className = 'price-controls';
                 priceDiv.innerHTML = `
                     Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" step="0.01"> / kg
                     <button type="button" onclick="updatePrice(${veg.id})">سیو کریں</button>
@@ -135,6 +135,6 @@ p<!DOCTYPE html>
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
-    <script src="script.js"></script>
+    </script>
 </body>
 </html>
