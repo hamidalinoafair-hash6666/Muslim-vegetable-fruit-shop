@@ -1,13 +1,14 @@
+
+}
 const SUPABASE_URL = "https://gtqvpjwpsxdampdsdvry.supabase.co";
 const SUPABASE_KEY = "sb_publishable_GfFX8mud_W3b39-f0p6jDg_M-EPAcu-";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function checkPassword(event) {
-    event.preventDefault();
+function checkPassword() {
     alert("checkPassword فنکشن چل پڑا ہے!");
     const passInput = document.getElementById('admin-pass');
     alert("آپ کا درج کردہ پاس ورڈ ہے: " + passInput.value);
-
+    
     if (passInput.value === "123.babli") { 
         document.getElementById('login-panel').style.display = 'none';
         document.getElementById('dashboard-panel').style.display = 'block';
@@ -24,7 +25,7 @@ async function loadAdminPanel() {
     listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ ہو رہا ہے...</p>';
 
     const { data, error } = await supabase.from('vegetables').select('*').order('id', { ascending: true });
-
+    
     if (error) {
         alert("ڈیٹا بیس کنیکشن میں مسئلہ: " + error.message);
         listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ کرنے میں ناکامی۔</p>';
@@ -39,7 +40,7 @@ async function loadAdminPanel() {
             { name: 'Tomatoes (ٹماٹر)', price_per_kg: 150, image_url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea' },
             { name: 'Green Chillies (ہری مرچ)', price_per_kg: 200, image_url: 'https://images.unsplash.com/photo-1588879460405-59b81b857700' }
         ];
-
+        
         const { error: seedError } = await supabase.from('vegetables').insert(sampleVeg);
         if (seedError) {
             alert("ڈیٹا سیڈ کرنے میں مسئلہ: " + seedError.message);
@@ -55,7 +56,7 @@ async function loadAdminPanel() {
     data.forEach(veg => {
         const row = document.createElement('div');
         row.className = 'admin-row';
-
+        
         const titleSpan = document.createElement('span');
         titleSpan.textContent = veg.name;
 
