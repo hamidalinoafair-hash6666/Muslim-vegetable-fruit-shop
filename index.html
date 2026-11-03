@@ -1,11 +1,13 @@
-DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Update Prices</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://jsdelivr.net"></script>
+    <!-- Correct Supabase CDN Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
@@ -32,15 +34,14 @@ DOCTYPE html>
     </main>
 
     <script>
-        // REPLACE WITH YOUR ACTUAL SUPABASE DETAILS
-        const SUPABASE_URL = "YOUR_SUPABASE_URL";
-        const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Yahan apni asli Supabase URL aur Anon Key dalein
+        const SUPABASE_URL = "YAHAN_APNI_SUPABASE_URL_DALEIN";
+        const SUPABASE_KEY = "YAHAN_APNI_SUPABASE_KEY_DALEIN";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Simple secure dashboard access check 
         function checkPassword() {
             const pass = document.getElementById('admin-pass').value;
-            // Set your own desired password here
             if (pass === "123.babli") { 
                 document.getElementById('login-panel').style.display = 'none';
                 document.getElementById('dashboard-panel').style.display = 'block';
@@ -53,7 +54,7 @@ DOCTYPE html>
         async function loadAdminPanel() {
             const { data, error } = await supabase.from('vegetables').select('*');
             if (error) {
-                alert("Error connecting to database.");
+                alert("Error connecting to database: " + error.message);
                 return;
             }
 
