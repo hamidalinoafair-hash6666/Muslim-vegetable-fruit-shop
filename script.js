@@ -1,207 +1,102 @@
-* Color Theme: Fresh Nature Green & Professional Textures */
-:root {
-    --primary-color: #2e7d32;
-    --accent-color: #4caf50;
-    --bg-light: #f1f8e9;
-    --dark-text: #263238;
-}
+const SUPABASE_URL = "https://gtqvpjwpsxdampdsdvry.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GfFX8mud_W3b39-f0p6jDg_M-EPAcu-";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+function checkPassword(event) {
+    event.preventDefault();
+    alert("checkPassword فنکشن چل پڑا ہے!");
+    const passInput = document.getElementById('admin-pass');
+    alert("آپ کا درج کردہ پاس ورڈ ہے: " + passInput.value);
 
-body {
-    background-color: #fafafa;
-    color: var(--dark-text);
-}
-
-header {
-    background-color: var(--primary-color);
-    color: white;
-    text-align: center;
-    padding: 20px 10px;
-}
-
-header p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    margin-top: 5px;
-}
-
-.nav-links {
-    margin-top: 10px;
-}
-
-.admin-btn {
-    color: white;
-    text-decoration: none;
-    font-size: 0.85rem;
-    background: rgba(255,255,255,0.2);
-    padding: 5px 10px;
-    border-radius: 4px;
-}
-
-main {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-}
-
-/* Make full screen stack grid layout on phones */
-@media (max-width: 768px) {
-    main {
-        grid-template-columns: 1fr;
+    if (passInput.value === "123.babli") { 
+        document.getElementById('login-panel').style.display = 'none';
+        document.getElementById('dashboard-panel').style.display = 'block';
+        loadAdminPanel();
+    } else {
+        alert("پاس ورڈ غلط ہے!");
+        document.getElementById('login-error').innerText = "غلط پاس ورڈ! دوبارہ کوشش کریں۔";
     }
 }
 
-h2 {
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 5px;
-    margin-bottom: 15px;
-    color: var(--primary-color);
+async function loadAdminPanel() {
+    alert("loadAdminPanel فنکشن چل رہا ہے...");
+    const listContainer = document.getElementById('admin-list');
+    listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ ہو رہا ہے...</p>';
+
+    const { data, error } = await supabase.from('vegetables').select('*').order('id', { ascending: true });
+
+    if (error) {
+        alert("ڈیٹا بیس کنیکشن میں مسئلہ: " + error.message);
+        listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ کرنے میں ناکامی۔</p>';
+        return;
+    }
+
+    if (data.length === 0) {
+        alert("ڈیٹا بیس خالی ہے، سیمپل ڈیٹا ڈالا جا رہا ہے۔");
+        const sampleVeg = [
+            { name: 'Potatoes (آلو)', price_per_kg: 80, image_url: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655' },
+            { name: 'Onions (پیاز)', price_per_kg: 120, image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8ce' },
+            { name: 'Tomatoes (ٹماٹر)', price_per_kg: 150, image_url: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea' },
+            { name: 'Green Chillies (ہری مرچ)', price_per_kg: 200, image_url: 'https://images.unsplash.com/photo-1588879460405-59b81b857700' }
+        ];
+
+        const { error: seedError } = await supabase.from('vegetables').insert(sampleVeg);
+        if (seedError) {
+            alert("ڈیٹا سیڈ کرنے میں مسئلہ: " + seedError.message);
+            return;
+        }
+        loadAdminPanel();
+        return;
+    }
+
+    alert("ڈیٹا کامیابی سے مل گیا ہے، اسکرین پر دکھایا جا رہا ہے۔");
+    listContainer.innerHTML = '';
+
+    data.forEach(veg => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = veg.name;
+
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'price-controls';
+        priceDiv.innerHTML = `
+            Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" step="0.01"> / kg
+            <button type="button" onclick="updatePrice(${veg.id})">سیو کریں</button>
+            <button type="button" class="whatsapp-btn" onclick="shareOnWhatsApp('${veg.name}', 'input-${veg.id}')">واٹس ایپ پر شیئر کریں</button>
+        `;
+
+        row.appendChild(titleSpan);
+        row.appendChild(priceDiv);
+        listContainer.appendChild(row);
+    });
 }
 
-/* Vegetable Cards Alignment Grid Layout */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+async function updatePrice(id) {
+    const inputVal = document.getElementById(`input-${id}`).value;
+    const newPrice = parseFloat(inputVal);
+
+    if (isNaN(newPrice) || newPrice < 0) {
+        alert("براہ کرم درست قیمت درج کریں۔");
+        return;
+    }
+
+    const { error } = await supabase
+        .from('vegetables')
+        .update({ price_per_kg: newPrice })
+        .eq('id', id);
+
+    if (error) {
+        alert("قیمت اپ ڈیٹ نہ ہو سکی: " + error.message);
+    } else {
+        alert("قیمت کامیابی سے اپ ڈیٹ ہو گئی!");
+    }
 }
 
-.card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    padding: 15px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
-}
-
-.card img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.card h3 {
-    margin: 10px 0 5px 0;
-    font-size: 1.1rem;
-}
-
-.card .price {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.card select {
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.card button, #login-panel button {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    width: 100%;
-}
-
-/* Cart & Form Formatting Styles */
-#cart-section {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    height: fit-content;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #ccc;
-    font-size: 0.95rem;
-}
-
-.delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.cart-total {
-    text-align: right;
-    margin: 15px 0;
-    font-size: 1.1rem;
-}
-
-#order-form input, #order-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.whatsapp-btn {
-    background-color: #25d366;
-    color: white;
-    border: none;
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Secure Admin Panel Styles Layout */
-.auth-card {
-    background: white;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.auth-card input {
-    width: 100%;
-    padding: 10px;
-    margin: 15px 0;
-}
-
-.admin-row {
-    background: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.admin-row button {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    margin-left: 5px;
-    border-radius: 4px;
+function shareOnWhatsApp(vegName, inputId) {
+    const price = document.getElementById(inputId).value;
+    const message = `تازہ ترین قیمت: ${vegName} کی نئی قیمت ${price} روپے فی کلو ہے۔`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
 }
