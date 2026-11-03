@@ -9,74 +9,66 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <header>
-        <h1>مسلم ویجیٹیبل شاپ ایڈمن</h1>
-        <p>روزانہ کی قیمتیں اپ ڈیٹ کریں</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>مسلم ویجیٹیبل شاپ ایڈمن</h1>
+            <p>روزانہ کی قیمتیں اپ ڈیٹ کریں</p>
+        </header>
 
-    <main id="admin-main">
-        <!-- لاگ ان پینل -->
-        <div id="login-panel" class="auth-card">
-            <h3>ایڈمن لاگ ان</h3>
-            <form onsubmit="handleLogin(event)">
-                <input type="password" id="admin-pass" placeholder="پاس ورڈ درج کریں" required>
-                <button type="submit">لاگ ان</button>
-            </form>
-            <p id="login-error" class="error-text" style="color: red;"></p>
-        </div>
-
-        <!-- ڈیش بورڈ پینل -->
-        <div id="dashboard-panel" style="display: none;">
-            <h2>قیمتوں کا مینیجر</h2>
-            <div id="admin-list">
-                <p>ڈیٹا لوڈ ہو رہا ہے...</p>
+        <main id="admin-main">
+            <!-- لاگ ان پینل -->
+            <div id="login-panel" class="auth-card">
+                <h3>ایڈمن لاگ ان</h3>
+                <form onsubmit="checkPassword(event)">
+                    <input type="password" id="admin-pass" placeholder="پاس ورڈ درج کریں" required>
+                    <button type="submit">لاگ ان</button>
+                </form>
+                <p id="login-error" class="error-text" style="color: red;"></p>
             </div>
-        </div>
-    </main>
+
+            <!-- ڈیش بورڈ پینل -->
+            <div id="dashboard-panel" style="display: none;">
+                <h2>قیمتوں کا مینیجر</h2>
+                <div id="admin-list">
+                    <p class="loading-text">ڈیٹا لوڈ ہو رہا ہے...</p>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
         const SUPABASE_URL = "https://gtqvpjwpsxdampdsdvry.supabase.co";
         const SUPABASE_KEY = "sb_publishable_GfFX8mud_W3b39-f0p6jDg_M-EPAcu-";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function handleLogin(event) {
+        function checkPassword(event) {
             event.preventDefault();
+            const passInput = document.getElementById('admin-pass');
+            const errorElement = document.getElementById('login-error');
             
-            // الرٹ 1: چیک کریں کہ لاگ ان بٹن پر کلک ہو رہا ہے یا نہیں
-            alert("لاگ ان کا عمل شروع ہو گیا ہے!");
-
-            const pass = document.getElementById('admin-pass').value;
-            
-            // الرٹ 2: جو پاس ورڈ آپ نے لکھا ہے وہ الرٹ میں دکھائی دے گا
-            alert("آپ نے یہ پاس ورڈ درج کیا ہے: " + pass);
-
-            if (pass === "123.babli") { 
-                alert("پاس ورڈ درست ہے! ڈیش بورڈ لوڈ ہو رہا ہے۔");
+            if (passInput.value === "123.babli") { 
                 document.getElementById('login-panel').style.display = 'none';
                 document.getElementById('dashboard-panel').style.display = 'block';
+                errorElement.innerText = "";
                 loadAdminPanel();
             } else {
-                alert("پاس ورڈ غلط ہے!");
-                document.getElementById('login-error').innerText = "غلط پاس ورڈ! دوبارہ کوشش کریں۔";
+                errorElement.innerText = "غلط پاس ورڈ! دوبارہ کوشش کریں۔";
             }
         }
 
         async function loadAdminPanel() {
-            alert("ڈیٹا بیس سے سبزیوں کا ڈیٹا حاصل کیا جا رہا ہے...");
-            
             const listContainer = document.getElementById('admin-list');
-            listContainer.innerHTML = "<p>ڈیٹا لوڈ ہو رہا ہے...</p>";
+            listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ ہو رہا ہے...</p>';
 
             const { data, error } = await supabase.from('vegetables').select('*').order('id', { ascending: true });
             
             if (error) {
                 alert("ڈیٹا بیس کنیکشن میں مسئلہ: " + error.message);
-                listContainer.innerHTML = "<p>ڈیٹا لوڈ کرنے میں ناکامی۔</p>";
+                listContainer.innerHTML = '<p class="loading-text">ڈیٹا لوڈ کرنے میں ناکامی۔</p>';
                 return;
             }
 
             if (data.length === 0) {
-                alert("ڈیٹا بیس خالی ہے، ابتدائی ڈیٹا ڈالا جا رہا ہے۔");
                 const sampleVeg = [
                     { name: 'Potatoes (آلو)', price_per_kg: 80, image_url: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655' },
                     { name: 'Onions (پیاز)', price_per_kg: 120, image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8ce' },
@@ -86,14 +78,12 @@
                 
                 const { error: seedError } = await supabase.from('vegetables').insert(sampleVeg);
                 if (seedError) {
-                    alert("نمونہ ڈیٹا ڈالنے میں ناکامی: " + seedError.message);
+                    alert("ڈیٹا سیڈ کرنے میں مسئلہ: " + seedError.message);
                     return;
                 }
                 loadAdminPanel();
                 return;
             }
-
-            alert("ڈیٹا کامیابی سے لوڈ ہو گیا ہے!");
 
             listContainer.innerHTML = '';
 
@@ -102,14 +92,14 @@
                 row.className = 'admin-row';
                 
                 const titleSpan = document.createElement('span');
-                const strongTitle = document.createElement('strong');
-                strongTitle.textContent = veg.name;
-                titleSpan.appendChild(strongTitle);
+                titleSpan.textContent = veg.name;
 
                 const priceDiv = document.createElement('div');
+                priceDiv.className = 'price-controls';
                 priceDiv.innerHTML = `
-                    Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" step="0.01" style="width: 80px;"> / kg
-                    <button onclick="updatePrice(${veg.id})">سیو کریں</button>
+                    Rs. <input type="number" id="input-${veg.id}" value="${veg.price_per_kg}" step="0.01"> / kg
+                    <button type="button" onclick="updatePrice(${veg.id})">سیو کریں</button>
+                    <button type="button" class="whatsapp-btn" onclick="shareOnWhatsApp('${veg.name}', 'input-${veg.id}')">واٹس ایپ پر شیئر کریں</button>
                 `;
 
                 row.appendChild(titleSpan);
@@ -123,7 +113,7 @@
             const newPrice = parseFloat(inputVal);
 
             if (isNaN(newPrice) || newPrice < 0) {
-                alert("براہ کرم صحیح قیمت درج کریں۔");
+                alert("براہ کرم درست قیمت درج کریں۔");
                 return;
             }
 
@@ -137,6 +127,13 @@
             } else {
                 alert("قیمت کامیابی سے اپ ڈیٹ ہو گئی!");
             }
+        }
+
+        function shareOnWhatsApp(vegName, inputId) {
+            const price = document.getElementById(inputId).value;
+            const message = `تازہ ترین قیمت: ${vegName} کی نئی قیمت ${price} روپے فی کلو ہے۔`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
         }
     </script>
 </body>
