@@ -1,42 +1,107 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ایڈمن ڈیش بورڈ - سبزیوں کی قیمتیں</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Supabase JS Client v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muslim Vegetable and Fruit Shop</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>مسلم ویجیٹیبل شاپ ایڈمن</h1>
-            <p>روزانہ کی قیمتیں اپ ڈیٹ کریں</p>
-        </header>
 
-        <main id="admin-main">
-            <!-- لا�� ان پینل -->
-            <div id="login-panel" class="auth-card">
-                <h3>ایڈمن لاگ ان</h3>
-                <form onsubmit="checkPassword(event)">
-                    <input type="password" id="admin-pass" placeholder="پاس ورڈ درج کریں" required>
-                    <button type="submit">لاگ ان</button>
-                </form>
-                <p id="login-error" class="error-text" style="color: red;"></p>
-            </div>
+<header class="topbar">
+  <div>
+    <h1>🥬 مسلم ویجیٹیبل اینڈ فروٹ شاپ</h1>
+    <p>تازہ سبزیاں اور پھل، خانیوال</p>
+  </div>
+  <a href="https://wa.me/923007466664" class="top-whatsapp">WhatsApp رابطہ</a>
+</header>
 
-            <!-- ڈیش بورڈ پینل -->
-            <div id="dashboard-panel" style="display: none;">
-                <h2>قیمتوں کا مینیجر</h2>
-                <div id="admin-list">
-                    <p class="loading-text">ڈیٹا لوڈ ہو رہا ہے...</p>
-                </div>
-            </div>
-        </main>
-    </div>
+<main class="wrap">
 
-    <script src="script.js"></script>
+<section class="hero">
+  <h2>گھر بیٹھے تازہ سبزیاں اور پھل منگوائیں</h2>
+  <p>اپنی پسند کی چیز منتخب کریں، وزن لکھیں اور قیمت خودکار معلوم کریں۔</p>
+</section>
 
+<section class="toolbar">
+  <input id="search" type="search" placeholder="سبزی یا پھل تلاش کریں">
+  <div class="tabs">
+    <button class="tab active" data-filter="all">سب کچھ</button>
+    <button class="tab" data-filter="vegetable">سبزیاں</button>
+    <button class="tab" data-filter="fruit">پھل</button>
+  </div>
+</section>
+
+<div id="notice" class="notice">قیمتیں لوڈ ہو رہی ہیں...</div>
+
+<section id="products" class="product-grid"></section>
+
+<section class="checkout-layout">
+
+<div class="panel">
+  <h2>🛒 آپ کی ٹوکری</h2>
+  <div id="cart-items">ٹوکری خالی ہے۔</div>
+  <button id="clear-cart" class="secondary-btn">ٹوکری خالی کریں</button>
+  <h2>کل بل: <span id="grand-total">0 روپے</span></h2>
+</div>
+
+<form id="order-form" class="panel">
+  <h2>آرڈر کی معلومات</h2>
+
+  <label>آپ کا نام
+    <input id="customer-name" required>
+  </label>
+
+  <label>موبائل نمبر
+    <input id="customer-phone" required>
+  </label>
+
+  <label>مکمل پتہ اور لوکیشن
+    <textarea id="customer-address" required></textarea>
+  </label>
+
+  <label>ادائیگی کا طریقہ
+    <select id="payment-method">
+      <option value="Cash on Delivery">Cash on Delivery</option>
+      <option value="JazzCash">JazzCash</option>
+      <option value="Easypaisa">Easypaisa</option>
+    </select>
+  </label>
+
+  <button class="primary-btn full" type="submit">
+    WhatsApp پر آرڈر بھیجیں
+  </button>
+  <p class="small">JazzCash اور Easypaisa کے براہ راست پیمنٹ گیٹ وے ابھی منسلک نہیں ہیں۔</p>
+</form>
+
+</section>
+
+<section class="admin-area">
+<details class="panel">
+  <summary>🔐 ایڈمن لاگ اِن اور قیمتوں کا انتظام</summary>
+
+  <div id="admin-login">
+    <input id="admin-pass" type="password" placeholder="ایڈمن پاس ورڈ">
+    <button id="login-btn" class="secondary-btn">لاگ اِن</button>
+    <p>نوٹ: یہ سادہ براؤزر لاگ اِن ہے، محفوظ سرور تصدیق نہیں۔</p>
+  </div>
+
+  <div id="admin-panel" hidden>
+    <div id="admin-list"></div>
+    <button id="logout-btn" class="secondary-btn">لاگ آؤٹ</button>
+  </div>
+</details>
+</section>
+
+</main>
+
+<footer>
+  <p>مسلم ویجیٹیبل اینڈ فروٹ شاپ</p>
+  <p>چوک جسونت نگر روڈ، کیمپ چوک، خانیوال، پاکستان</p>
+  <p>WhatsApp: 0300 7466664</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
