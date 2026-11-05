@@ -58,8 +58,8 @@ const emojiList = [
 [/آم|mango/i,"🥭"],
 [/مالٹا|orange/i,"🍊"],
 [/انگور/i,"🍇"],
-[/تربوز/i,"🍉"],
-[/خربوزہ/i,"🍈"]
+[/تربوز|water melon|watermelon/i,"🍉"],
+[/خربوزہ|melon/i,"🍈"]
 ];
 
 function emojiOf(name) {
