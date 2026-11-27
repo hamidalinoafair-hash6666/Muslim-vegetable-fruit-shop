@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: muslim-vegetable-fruit-shop
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npx tsx server.ts
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_SUPABASE_URL
+        value: https://gtqvpjwpsxdampdsdvry.supabase.co
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        value: sb_publishable_GfFX8mud_W3b39-f0p6jDg_M-EPAcu-
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OWNER_ADMIN_PASSWORD
+        sync: false

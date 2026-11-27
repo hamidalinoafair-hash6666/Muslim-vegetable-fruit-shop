@@ -1,0 +1,6 @@
+{
+  "name": "Muslim Vegetable and Fruit Shop",
+  "description": "Muslim Vegetable and Fruit Shop (مسلم ویجیٹیبل اینڈ فروٹ شاپ) — Urdu-first bilingual online vegetable & fruit storefront, flexible weight/rupee ordering, Khanewal road-distance delivery, JazzCash & Bank Alfalah receipt verification, 6-stage tracking, rider portal, and owner-only admin PWA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
