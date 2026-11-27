@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+    <linearGradient id="appleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+    <linearGradient id="carrotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded card -->
+  <rect width="512" height="512" rx="128" fill="url(#bg)"/>
+  
+  <!-- Subtle inner glow ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.15"/>
+
+  <!-- Fruit & Vegetable Icons Group -->
+  <g transform="translate(64, 55) scale(0.75)">
+    <!-- Woven Basket -->
+    <path d="M70,280 C90,440 420,440 440,280 L70,280 Z" fill="#854d0e"/>
+    <path d="M90,290 C110,420 400,420 420,290" fill="none" stroke="#a16207" stroke-width="12" stroke-dasharray="16 12"/>
+    <path d="M120,330 C135,400 375,400 390,330" fill="none" stroke="#713f12" stroke-width="10" stroke-dasharray="14 10"/>
+    <path d="M50,270 L460,270" stroke="#ca8a04" stroke-width="20" stroke-linecap="round"/>
+
+    <!-- Apple (Left) -->
+    <ellipse cx="180" cy="230" rx="65" ry="60" fill="url(#appleGrad)"/>
+    <ellipse cx="210" cy="230" rx="60" ry="60" fill="url(#appleGrad)"/>
+    <path d="M195,170 C195,150 205,130 220,120" stroke="#78350f" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M220,135 C250,130 260,150 240,165 C225,160 220,145 220,135 Z" fill="url(#leafGrad)"/>
+
+    <!-- Carrot (Right angled) -->
+    <path d="M300,160 L380,270 C390,285 365,300 350,285 L280,180 Z" fill="url(#carrotGrad)"/>
+    <!-- Carrot Greens -->
+    <path d="M285,165 C270,130 240,120 230,110" stroke="#22c55e" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M295,160 C290,120 300,100 305,90" stroke="#4ade80" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M305,170 C330,140 350,130 365,125" stroke="#16a34a" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+    <!-- Fresh Broccoli / Greens (Center) -->
+    <circle cx="280" cy="220" r="45" fill="#15803d"/>
+    <circle cx="320" cy="235" r="40" fill="#16a34a"/>
+    <circle cx="250" cy="245" r="38" fill="#22c55e"/>
+
+    <!-- Crescent and Star emblem representing Muslim brand -->
+    <path d="M110,95 A 40 40 0 1 0 145 160 A 30 30 0 1 1 110 95 Z" fill="url(#goldGrad)" />
+    <polygon points="152,110 156,122 168,122 158,130 162,142 152,134 142,142 146,130 136,122 148,122" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- Brand Title Badge -->
+  <rect x="36" y="405" width="440" height="70" rx="24" fill="#ffffff" opacity="0.96"/>
+  <text x="256" y="438" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="22" fill="#166534" text-anchor="middle" letter-spacing="0.5">MUSLIM VEGETABLE &amp; FRUIT</text>
+  <text x="256" y="462" font-family="'Noto Nastaliq Urdu', Tahoma, sans-serif" font-weight="bold" font-size="16" fill="#15803d" text-anchor="middle">مسلم ویجیٹیبل اینڈ فروٹ شاپ</text>
+</svg>
